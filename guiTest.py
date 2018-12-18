@@ -147,11 +147,7 @@ def loadMissionCreateGui():
 	for p in choices2:
 		proj.addEquipmentListWDesc(p,missionID)
 		
-	
-	
-	
-
-	
+		
 		
 def loadTeamCreateGui():
 	value = proj.findAvailableVolunteers()
@@ -163,6 +159,7 @@ def loadTeamCreateGui():
 	#size = len(fieldValues)
 	for i in fieldValues:
 		proj.addTeamAssignment(i,teamID)
+		
 def loadTeamUpdateGui():
 	#operation can be either add or delete
 	msg = "Enter team update"
@@ -262,3 +259,4 @@ else: #SELECTION FOR THE CALL STAFF
 			loadReomveVolunteerGui()
 		else:
 			flagEscape = True
+
