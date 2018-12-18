@@ -254,6 +254,35 @@ def removeEvent(passedId):
 		
 	except Exception:
 		print("Error in removeEvent")
+#updates an event's information
+def updateEvent(passedId, loc = "null", des = "null", pri = "null", stat = "null", equ = "null"):
+	try:
+	
+		if loc != "null":
+			geolocator = Nominatim(user_agent="software_proj")
+			location = geolocator.geocode(loc)
+			#+str(location.latitude)+", "+str(location.longitude)
+			query = "update event set location = '"+loc+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+			query = "update event set lat = '"+str(location.latitude)+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+			query = "update event set `long` = '"+str(location.longitude)+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if des != "null":
+			query = "update event set description = '"+des+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if pri != "null":
+			query = "update event set priority = '"+pri+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if stat != "null":
+			query = "update event set status = '"+stat+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if equ != "null":
+			query = "update event set equipNeeded = '"+equ+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updateEquipent")
 
 #inserts a new team into the database
 def addTeam():
