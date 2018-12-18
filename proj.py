@@ -4,8 +4,8 @@ from geopy.geocoders import Nominatim
 def getConnection():
 	return pymysql.connect(host='localhost',
 	user='root',
-	password='Jawa#609',
-	db='softengin')
+	password='bigButts',
+	db='test')
 
 conn = getConnection()
 cursor = conn.cursor()
@@ -153,7 +153,7 @@ def removeVolunteer(passedId):
 		cursor.execute(sql)
 		temp = cursor.fetchone()
 		toDelete = temp[0]
-		print(toDelete)
+		#print(toDelete)
 		
 		query = "Delete From `Volunteer` Where Volunteer_ID = "+str(passedId)+";"
 		cursor.execute(query)
@@ -161,15 +161,7 @@ def removeVolunteer(passedId):
 		query = "Delete From `Person` Where Person_ID = "+str(toDelete)+";"
 		cursor.execute(query)
 		conn.commit()
-		
-<<<<<<< HEAD
-		#sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-        #cursor.execute(sql, ('webmaster@python.org',))
-        #result = cursor.fetchone()
-        #print(result)
-		
-=======
->>>>>>> 326b0222e7207139d3625639117c90c7fd36ab26
+
 	except Exception:
 		print("Error in removeVolunteer")
 #updates a volunteer's information
@@ -461,9 +453,9 @@ def checkIfCall(employee_ID):
 
     except Exception:
         print("Error in checkIfCall")
-def findAvailableVolunteers():
-    try:
 
+def findAvailableVolunteers():
+	try:
 		query = "SELECT volunteer.Volunteer_ID FROM volunteer WHERE  Volunteer_ID  NOT IN (SELECT Volunteer_ID  FROM teamassignments)"
 		cursor.execute(query)
 		results = cursor.fetchall()
@@ -473,68 +465,68 @@ def findAvailableVolunteers():
 			inputcheck.append(result[0])
 		return inputcheck
 
-    except Exception:
-        print("Error in findAvailableVolunteers")
+	except Exception:
+		print("Error in findAvailableVolunteers")
 
 def findAssignedVolunteers(teamID):
-    try:
+	try:
 		query = "SELECT Volunteer_ID FROM teamassignments Where Team_ID = " + str(teamID)
 		cursor.execute(query)
 		results = cursor.fetchall()
-		print results
+		print (results)
 		inputcheck=[]
 
 		for result in results:
 			inputcheck.append(result[0])
 		return inputcheck
 
-    except Exception:
-        print("Error in findAssignedVolunteers")
+	except Exception:
+		print("Error in findAssignedVolunteers")
 
 def findUnAssignedTeams():
-    try:
+	try:
 		query = "SELECT team.Team_ID FROM team WHERE  Team_ID  NOT IN (SELECT Team_ID  FROM is_on)"
 		cursor.execute(query)
 		results = cursor.fetchall()
-		print results
+		print (results)
 		inputcheck=[]
 
 		for result in results:
 			inputcheck.append(result[0])
 		return inputcheck
 
-    except Exception:
-        print("Error in findUnAssignedTeams")
+	except Exception:
+		print("Error in findUnAssignedTeams")
 
 def findUnAssignedEvents():
-    try:
+	try:
 		query = "SELECT event.Event_ID FROM event WHERE  Event_ID  NOT IN (SELECT Event_ID  FROM eventlist)"
 		cursor.execute(query)
 		results = cursor.fetchall()
-		print results
+		print (results)
 		inputcheck=[]
 
 		for result in results:
 			inputcheck.append(result[0])
 		return inputcheck
 
-    except Exception:
-        print("Error in findUnAssignedEvents")
+	except Exception:
+		print("Error in findUnAssignedEvents")
 
 def findAvailableEquipment():
-    try:
+	try:
 		query = "SELECT equipment.description FROM equipment WHERE  Equipment_ID  NOT IN (SELECT Equipment_ID  FROM equipmentlist)"
 		cursor.execute(query)
 		results = cursor.fetchall()
-		print results
+		print (results)
 		inputcheck=[]
 
 		for result in results:
 			inputcheck.append(result[0])
 		return inputcheck
 
-    except Exception:
-        print("Error in findUnAssignedEquipment")
+	except Exception:
+		print("Error in findUnAssignedEquipment")
 		
 def addEquipmentListWDesc(desc, missId):
 	try:
@@ -548,4 +540,3 @@ def addEquipmentListWDesc(desc, missId):
 
 #addCallStaff(0)
 #addMissionChief(0)
-
