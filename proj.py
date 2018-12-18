@@ -37,19 +37,20 @@ def addPerson(commit = False):
 def updatePerson(passedId, fn = "null", ln = "null", pn = "null"):
 	try:
 		if fn != "null":
-			query = "update person set firstName = '"+fn+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set firstName = '"+fn+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if ln != "null":
-			query = "update person set lastName = '"+ln+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set lastName = '"+ln+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if pn != "null":
-			query = "update person set phoneNumber = '"+pn+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set phoneNumber = '"+pn+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		conn.commit()
 	except Exception:
 		print("Error in updatePerson")
+
 #inserts an employee into the database
-def addEmployee(passedId, commit = False):
+def addEmp(passedId, commit = False):
 	#check if using an existing person or a new person is to be created
 	if passedId <= 0:
 		newPersId = addPerson()
@@ -72,20 +73,20 @@ def addEmployee(passedId, commit = False):
 		return newEmpId
 
 	except Exception:
-		print("Error in addEmployee")
+		print("Error in addEmp")
 #updates an employee's information
-def updateEmployee(passedId, un = "null", pw = "null"):
+def updateEmp(passedId, un = "null", pw = "null"):
 	try:
 		if un != "null":
-			query = "update employee set username = '"+un+"' where Employee_ID = +'"+str(passedId)+"';"
+			query = "update employee set username = '"+un+"' where Employee_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if pw != "null":
-			query = "update employee set password = '"+pw+"' where Employee_ID = +'"+str(passedId)+"';"
+			query = "update employee set password = '"+pw+"' where Employee_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		conn.commit()
 	except Exception:
-		print("Error in updateEmployee")
-		
+		print("Error in updateEmp")
+
 #inserts a call staff employee into the database
 def addCallStaff(passedId):
 	#check if using an existing employee or a new employee is to be created
@@ -126,26 +127,6 @@ def addMissionChief(passedId):
 	except Exception:
 		print("Error in addMissionChief")	
 
-#inserts a missionchief into the database
-def addMissionChief(passedId):
-	#check if using an existing employee or a new employee is to be created
-	if passedId <= 0:
-		newEmpId = addEmp()
-	else:
-		newEmpId = passedId
-	
-	try:
-		newEmpId = addEmp()
-		query = "INSERT INTO `MissionChief` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
-		cursor.execute(query)
-		newChiefId = conn.insert_id()
-		conn.commit()
-		
-		return  newChiefId
-		
-	except Exception:
-		print("Error in addMissionChief")
-		
 #inserts a volunteer into the database
 def addVolunteer(passedId):
 	
@@ -167,7 +148,6 @@ def addVolunteer(passedId):
 		
 	except Exception:
 		print("Error in addVolunteer")
-		
 #removes an volunteer from the database
 def removeVolunteer(passedId):
 	try:
@@ -183,9 +163,10 @@ def updateVolunteer(passedId, av = "null"):
 		if av != "null":
 			query = "update volunteer set availability = '"+av+"' where Volunteer_ID = "+str(passedId)+";"
 			cursor.execute(query)
-			conn.commit()
+		conn.commit()
 	except Exception:
 		print("Error in updateVolunteer")
+
 #inserts a new equipment into the database
 def addEquipment():
 	#desc = input("Input description: ")
@@ -216,6 +197,24 @@ def removeEquipment(passedId):
 		
 	except Exception:
 		print("Error in removeEquipment")
+#updates an equipment's information
+def updateEquipment(passedId, des = "null", loc = "null", own = "null", cond = "null"):
+	try:
+		if des != "null":
+			query = "update equipment set description = '"+des+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if loc != "null":
+			query = "update equipment set location = '"+loc+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if own != "null":
+			query = "update equipment set ownerInfo = '"+own+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if cond != "null":
+			query = "update equipment set `condition` = '"+cond+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updateEquipent")
 
 #inserts a new event into the database
 def addEvent():
@@ -255,6 +254,35 @@ def removeEvent(passedId):
 		
 	except Exception:
 		print("Error in removeEvent")
+#updates an event's information
+def updateEvent(passedId, loc = "null", des = "null", pri = "null", stat = "null", equ = "null"):
+	try:
+	
+		if loc != "null":
+			geolocator = Nominatim(user_agent="software_proj")
+			location = geolocator.geocode(loc)
+			#+str(location.latitude)+", "+str(location.longitude)
+			query = "update event set location = '"+loc+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+			query = "update event set lat = '"+str(location.latitude)+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+			query = "update event set `long` = '"+str(location.longitude)+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if des != "null":
+			query = "update event set description = '"+des+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if pri != "null":
+			query = "update event set priority = '"+pri+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if stat != "null":
+			query = "update event set status = '"+stat+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if equ != "null":
+			query = "update event set equipNeeded = '"+equ+"' where Event_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updateEquipent")
 
 #inserts a new team into the database
 def addTeam():
@@ -377,6 +405,8 @@ def removeEquipmentList(equipId, missId):
 	except Exception:
 		print("Error in removeEquipmentList")
 
-updatePerson(1, pn = "")
+#addEquipment()
+updateEquipment(1, des = "asdf", loc = "tfffest2", own = "fds", cond = "wew")
+
 
 
