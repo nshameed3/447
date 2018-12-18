@@ -4,8 +4,8 @@ from geopy.geocoders import Nominatim
 def getConnection():
 	return pymysql.connect(host='localhost',
 	user='root',
-	password='bigButts',
-	db='test')
+	password='Jawa#609',
+	db='softengin')
 
 conn = getConnection()
 cursor = conn.cursor()
@@ -419,6 +419,19 @@ def removeEquipmentList(equipId, missId):
 		
 	except Exception:
 		print("Error in removeEquipmentList")
+		
+		
+def checkUserPass(username, password):
+	try:
+		query = "SELECT Employee_ID From `Employee` Where userName = '"+str(username)+"' And password = '"+str(password)+"';"
+		cursor.execute(query)
+		inputcheck = cursor.fetchone()
+		print (inputcheck)
+		
+		return inputcheck;	
+	except Exception:
+		print("Error in removeEquipmentList")
+	
 
 #addEquipment()
 updateEquipment(1, des = "asdf", loc = "tfffest2", own = "fds", cond = "wew")
