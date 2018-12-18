@@ -1,6 +1,17 @@
 from easygui import *
 import proj
 
+def is_empty(any_structure):
+    if any_structure:
+        #print('Structure is not empty.')
+        return False
+    else:
+        #print('Structure is empty.')
+        return True
+		
+def	loadMessage(passMsg, passTitle):
+	ccbox(passMsg, passTitle, choices=('C[o]ntinue', 'C[a]ncel'), image=None, default_choice='Continue', cancel_choice='Cancel')
+	
 def loadCreateEventGui():
 	#EVENT CREATION BLOCK
 	msg = "Enter event information"
@@ -132,39 +143,54 @@ def loadMissionCreateGui():
 		
 		
 	value = proj.findUnAssignedTeams()
-	choice = choicebox(msg = "Pick from the list of teams", title = "Available Teams", choices = value)
-	proj.addIsOn(choice, missionID)
+	if is_empty(value):
+		loadMessage("No available Teams", "Team Selection")
+	else:
+		choice = choicebox(msg = "Pick from the list of teams", title = "Available Teams", choices = value)
+		proj.addIsOn(choice, missionID)
 	
 	value2 = proj.findUnAssignedEvents()
-	choices1=[]
-	choices1 = multchoicebox(msg = "Pick from the list of events", title = "Available Events", choices = value2)
-	for i in choices1:
-		proj.addEventList(i,missionID)
+	if is_empty(value2):
+		loadMessage("No available Events", "Event Selection")
+	else:
+		choices1=[]
+		choices1 = multchoicebox(msg = "Pick from the list of events", title = "Available Events", choices = value2)
+		for i in choices1:
+			proj.addEventList(i,missionID)
 		
 	value3 = proj.findAvailableEquipment()
-	choices2=[]
-	choices2 = multchoicebox(msg = "Pick from the list of events", title = "Available Events", choices = value3)
-	for p in choices2:
-		proj.addEquipmentListWDesc(p,missionID)
-		
-		
+	if is_empty(value3):
+		loadMessage("No available Equipment", "Equipment Selection")
+	else:
+		choices2=[]
+		choices2 = multchoicebox(msg = "Pick from the list of equipment", title = "Available Equipment", choices = value3)
+		for p in choices2:
+			proj.addEquipmentListWDesc(p,missionID)
 		
 def loadTeamCreateGui():
-	value = proj.findAvailableVolunteers()
-	fieldValues = []
-	fieldValues = multchoicebox(msg = "Pick from the list of volunteers", title = "Available Volunteers", choices = value)
-	print "Reply was:", fieldValues
+	title = "AVAILABLE VOLUNTEERS"
 	
-	teamID = proj.addTeam()
-	#size = len(fieldValues)
-	for i in fieldValues:
-		proj.addTeamAssignment(i,teamID)
+	value = proj.findAvailableVolunteers()
+	if is_empty(value):
+		loadMessage("No Volunteers Available for Team Assignment",'Available Volunteers') 
+	
+	else:
+		msg = "Pick from the list of volunteers"
+		fieldValues = []
+		fieldValues = multchoicebox(choices = value)
+		print ("Reply was:", fieldValues)
+	
+		teamID = proj.addTeam()
+		#size = len(fieldValues)
+		for i in fieldValues:
+			proj.addTeamAssignment(i[0],teamID)
+			print (i[0])
 		
 def loadTeamUpdateGui():
 	#operation can be either add or delete
 	msg = "Enter team update"
 	title = "UPDATE TEAM"
-	fieldNames = ["Team ID","Operation"]
+	fieldNames = ["Team ID","Operation as 'add' or 'remove'"]
 	fieldValues = [] # we start with blanks for the values
 	fieldValues = multenterbox(msg,title, fieldNames)
 	
@@ -177,26 +203,29 @@ def loadTeamUpdateGui():
 				errmsg = errmsg + ('"%s" is a required field.\n\n' % fieldNames[i])
 		if errmsg == "": break # no problems found
 		fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)
-	print "Reply was:", fieldValues
+	print ("Reply was:", fieldValues)
 	
 	if fieldValues[1]=='add':
 		value = proj.findAvailableVolunteers()
-		fieldValues2 = []
-		fieldValues2 = multchoicebox(msg = "Pick from the list of volunteers", title = "Available Volunteers", choices = value)
-		for p in fieldValues2:
-			proj.addTeamAssignment(p, fieldValues[0]) #needs error checking for the teamID
+		if is_empty(value):
+			loadMessage("No Available Volunteers", title)
+		else:
+			fieldValues2 = []
+			fieldValues2 = multchoicebox(msg = "Pick from the list of volunteers", title = "Available Volunteers", choices = value)
+			for p in fieldValues2:
+				proj.addTeamAssignment(p, fieldValues[0]) #needs error checking for the teamID
 	
 	elif fieldValues[1] == 'remove':
 		value2 = proj.findAssignedVolunteers(fieldValues[0])
-		fieldValues3 = []
-		fieldValues3 = multchoicebox(msg = "Pick from the list of volunteers", title = "Assigned Volunteers", choices = value2)
-		for q in fieldValues3:
-			proj.removeTeamAssignment(q, fieldValues[0]) #needs error checking for the teamID
-		
-		
+		if is_empty(value2):
+			loadMessage("No Assigned Volunteers", title)
+		else:
+			fieldValues3 = []
+			print(value2)
+			fieldValues3 = multchoicebox(msg = "Pick from the list of volunteers", title = "Assigned Volunteers", choices = value2)
+			for q in fieldValues3:
+				proj.removeTeamAssignment(q, fieldValues[0]) #needs error checking for the teamID
 	
-
-		
 
 msg = "Enter logon information"
 title = "LOGIN"
@@ -226,19 +255,28 @@ switch = proj.checkIfCall(check[0])
 flagEscape = False
 if switch is None:
 	while flagEscape == False:
-		msg = "Choose from the following"
-		title = "MISSION CHIEF"
-		choices = ["Create Mission", "Create Team", "Update Mission", "Update Team", "View Event Map", "Delete Mission"]
-		choice = choicebox(msg, title, choices)
+		try:
+			msg = "Choose from the following"
+			title = "MISSION CHIEF"
+			choices = ["Create Mission", "Create Team", "Update Mission", "Update Team", "View Event Map", "Delete Mission"]
+			choice = choicebox(msg, title, choices)
 
-		if choice == "Create Mission":
-			loadMissionCreateGui()
-		elif choice == "Create Team":
-			loadTeamCreateGui()
-		elif choice == "Update Team":
-			loadTeamUpdateGui()
-		else:
-			flagEscape = True
+			if choice == "Create Mission":
+				loadMissionCreateGui()
+			elif choice == "Create Team":
+				loadTeamCreateGui()
+			elif choice == "Update Team":
+				loadTeamUpdateGui()
+			elif choice == "Update Mission":
+				loadMessage("Section not yet implemented", "Sorry")
+			elif choice == "View Event Map":
+				loadMessage("Section not yet implemented", "Sorry")
+			elif choice == "Delete Mission":
+				loadMessage("Section not yet implemented" "Sorry")
+			else:
+				flagEscape = True
+		except Exception:
+			print("")
 	
 else: #SELECTION FOR THE CALL STAFF
 	while flagEscape == False:
@@ -246,17 +284,18 @@ else: #SELECTION FOR THE CALL STAFF
 		title = "CALL STAFF"
 		choices = ["Create Event", "Create Equipment", "Create Volunteer", "Delete Equipment", "Delete Volunteer"]
 		choice = choicebox(msg, title, choices)
-	
-		if choice == "Create Event":
-			loadCreateEventGui()
-		elif choice == "Create Equipment":	
-			loadCreateEquipmentGui()
-		elif choice == "Create Volunteer":
-			loadCreateVolunteerGui()
-		elif choice == "Delete Equipment":
-			loadRemoveEquipmentGui()
-		elif choice == "Delete Volunteer":
-			loadReomveVolunteerGui()
-		else:
-			flagEscape = True
-
+		try:
+			if choice == "Create Event":
+				loadCreateEventGui()
+			elif choice == "Create Equipment":	
+				loadCreateEquipmentGui()
+			elif choice == "Create Volunteer":
+				loadCreateVolunteerGui()
+			elif choice == "Delete Equipment":
+				loadRemoveEquipmentGui()
+			elif choice == "Delete Volunteer":
+				loadReomveVolunteerGui()
+			else:
+				flagEscape = True
+		except Exception:
+			print("canceled, going back to the main screen")
