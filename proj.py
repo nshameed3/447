@@ -217,7 +217,7 @@ def updateEquipment(passedId, des = "null", loc = "null", own = "null", cond = "
 		print("Error in updateEquipent")
 
 #inserts a new event into the database
-def addEvent():
+def addEvent(loc = "", desc = "", prio = "", status = "", equip = ""):
 	#loc = input("Input location as an address: ")
 	loc = "4700 Gateway Terrace, Arbutus Md"
 	geolocator = Nominatim(user_agent="software_proj")
@@ -228,12 +228,12 @@ def addEvent():
 	#print(location.raw)
 	
 	#desc = input("Input description of the event: ")
-	desc = "Ive fallen and I cant get up"
+	#desc = "Ive fallen and I cant get up"
 	#prio = input("Input Priority of the event: ")
-	prio = "medium"
-	status = "new"
+	#prio = "medium"
+	#status = "new"
 	#equip = input("List special equipment that might be needed:")
-	equip = "Ambulance"
+	#equip = "Ambulance"
 	
 	try:
 		query = "INSERT INTO `Event` (`location`, `description`, `priority`, `status`, `equipNeeded`, `lat`, `long`)  VALUES ( '"+location.address+"', '"+desc+"', '"+prio+"', '"+status+"', '"+equip+"', "+str(location.latitude)+", "+str(location.longitude)+");"
@@ -326,9 +326,9 @@ def removeTeamAssignment(volId, teamId):
 		print("Error in removeTeamAssignment")
 
 #adds a mission into the database
-def addMission():
+def addMission(pri = "", stat = ""):
 	try:
-		query = "INSERT INTO `Mission` (`timeSinceAssigned`, `timeCreated`, `priority`, `status`) VALUES ( null, current_timestamp(), null, 'new');"
+		query = "INSERT INTO `Mission` (`timeSinceAssigned`, `timeCreated`, `priority`, `status`) VALUES ( null, current_timestamp(), 'low', 'new');"
 		cursor.execute(query)
 		newMissionId = conn.insert_id()
 		conn.commit()
@@ -433,8 +433,16 @@ def checkUserPass(username, password):
 		print("Error in removeEquipmentList")
 	
 
-#addEquipment()
-updateEquipment(1, des = "asdf", loc = "tfffest2", own = "fds", cond = "wew")
+#checks if a username is associated with a password
+def checkUserPass(username, password):
+    try:
+        query = "SELECT Employee_ID From Employee Where userName = '"+str(username)+"' And password = '"+str(password)+"';"
+        cursor.execute(query)
+        inputcheck = cursor.fetchone()
 
-
-
+        return inputcheck;
+    except Exception:
+        print("Error in removeEquipmentList")
+		
+#temp1 = addMission()
+#updateMission(6, ts = True)
