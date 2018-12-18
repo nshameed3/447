@@ -2,7 +2,7 @@ from easygui import *
 
 
 msg = "Enter logon information"
-title = "Demo of multpasswordbox"
+title = "LOGIN"
 fieldNames = ["User ID", "Password"]
 fieldValues = []  # we start with blanks for the values
 fieldValues = multpasswordbox(msg,title, fieldNames)
@@ -17,6 +17,15 @@ while 1:
   if errmsg == "": break # no problems found
   fieldValues = multpasswordbox(errmsg, title, fieldNames, fieldValues)
 print "Reply was:", fieldValues
+
+
+
+
+msg = "Choose from the following"
+title = "CALL STAFF"
+choices = ["Create Event Report", "Create Equipment Report", "Create Volunteer Report", "Delete Event", "Delete Equipment", "Delete Volunteer"]
+choice = choicebox(msg, title, choices)
+
 
 
 
@@ -38,8 +47,6 @@ while 1:
 print "Reply was:", fieldValues
 
 
-
-
 msg = "Enter equipment information"
 title = "EQUIPMENT REPORT"
 fieldNames = ["Owner Name","Owner Phone Number","Type", "Description", "Condition"]
@@ -58,7 +65,6 @@ while 1:
 print "Reply was:", fieldValues
 
 
-
 msg = "Enter volunteer information"
 title = "VOLUNTEER REPORT"
 fieldNames = ["First Name","Last Name","Phone Number","Street Address","City","State","ZipCode", "Availability"]
@@ -75,3 +81,5 @@ while 1:
     if errmsg == "": break # no problems found
     fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)
 print "Reply was:", fieldValues
+
+
