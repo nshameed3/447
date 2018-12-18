@@ -49,7 +49,7 @@ def updatePerson(passedId, fn = "null", ln = "null", pn = "null"):
 	except Exception:
 		print("Error in updatePerson")
 #inserts an employee into the database
-def addEmp(passedId, commit = False):
+def addEmployee(passedId, commit = False):
 	#check if using an existing person or a new person is to be created
 	if passedId <= 0:
 		newPersId = addPerson()
@@ -72,9 +72,9 @@ def addEmp(passedId, commit = False):
 		return newEmpId
 
 	except Exception:
-		print("Error in addEmp")
+		print("Error in addEmployee")
 #updates an employee's information
-def updatePerson(passedId, un = "null", pw = "null"):
+def updateEmployee(passedId, un = "null", pw = "null"):
 	try:
 		if un != "null":
 			query = "update employee set username = '"+un+"' where Employee_ID = +'"+str(passedId)+"';"
@@ -84,7 +84,7 @@ def updatePerson(passedId, un = "null", pw = "null"):
 			cursor.execute(query)
 		conn.commit()
 	except Exception:
-		print("Error in updatePerson")
+		print("Error in updateEmployee")
 		
 #inserts a call staff employee into the database
 def addCallStaff(passedId):
@@ -144,7 +144,8 @@ def addMissionChief(passedId):
 		return  newChiefId
 		
 	except Exception:
-		print("Error in addMissionChief")	
+		print("Error in addMissionChief")
+		
 #inserts a volunteer into the database
 def addVolunteer(passedId):
 	
@@ -166,6 +167,7 @@ def addVolunteer(passedId):
 		
 	except Exception:
 		print("Error in addVolunteer")
+		
 #removes an volunteer from the database
 def removeVolunteer(passedId):
 	try:
