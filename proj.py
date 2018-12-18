@@ -4,8 +4,8 @@ from geopy.geocoders import Nominatim
 def getConnection():
 	return pymysql.connect(host='localhost',
 	user='root',
-	password='bigButts',
-	db='test')
+	password='Jawa#609',
+	db='softengin')
 
 conn = getConnection()
 cursor = conn.cursor()
@@ -259,6 +259,7 @@ def removeEvent(passedId):
 def updateEvent(passedId, loc = "null", des = "null", pri = "null", stat = "null", equ = "null"):
 	conn = getConnection()
 	cursor = conn.cursor()
+	
 	try:
 	
 		if loc != "null":
@@ -290,15 +291,18 @@ def updateEvent(passedId, loc = "null", des = "null", pri = "null", stat = "null
 #inserts a new team into the database
 def addTeam():
 	try:
-		query = "INSERT INTO `Team` VALUES ();"
+		query = "INSERT INTO Team() VALUES (NULL);"
 		cursor.execute(query)
 		newTeamId = conn.insert_id()
 		conn.commit()
 		
+		
 		return  newTeamId
 		
 	except Exception:
-		print("Error in addTeam")	
+		print("Error in addTeam")
+		
+	
 #removes a team from the database
 def removeTeam(passedId):
 	try:
@@ -329,14 +333,14 @@ def removeTeamAssignment(volId, teamId):
 		print("Error in removeTeamAssignment")
 
 #adds a mission into the database
-def addMission(pri = "", stat = ""):
+def addMission(pri):
 	try:
-		query = "INSERT INTO `Mission` (`timeSinceAssigned`, `timeCreated`, `priority`, `status`) VALUES ( null, current_timestamp(), 'low', 'new');"
+		query = "INSERT INTO `Mission` (`timeSinceAssigned`, `timeCreated`, `priority`, `status`) VALUES ( null, current_timestamp(), '"+ pri+"', 'new');"
 		cursor.execute(query)
 		newMissionId = conn.insert_id()
 		conn.commit()
 		
-		return  newMissionId
+		return newMissionId
 		
 	except Exception:
 		print("Error in addMission")
@@ -387,7 +391,7 @@ def removeIsOn(teamId, missId):
 #add an event into the mission's list of events
 def addEventList(eventId, missId):
 	try:
-		query = "INSERT INTO `EventList` (`Event_ID`, `Mission_ID`) VALUES ("+str(eventId)+", "+str(missId)+");"
+		query = "INSERT INTO `EventList` (`Mission_ID`, `Event_ID`) VALUES ("+str(missId)+", "+str(eventId)+");"
 		cursor.execute(query)
 		conn.commit()
 		
@@ -407,12 +411,21 @@ def removeEventList(eventId, missId):
 #add a new equipment to the mission's list of equipment
 def addEquipmentList(equipId, missId):
 	try:
-		query = "INSERT INTO `EquipmentList` (`Equipment_ID`, `Mission_ID`) VALUES ("+str(equipId)+", "+str(missId)+");"
+		query = "INSERT INTO `EquipmentList` (`Mission_ID`,`Equipment_ID`) VALUES ("+str(missId)+", "+str(equipId)+");"
 		cursor.execute(query)
 		conn.commit()
 		
 	except Exception:
-		print("Error in addEventList")
+		print("Error in addEquipmentList")
+def addEquipmentListWDesc(desc, missId):
+	try:
+		query = "SELECT Equipment_ID FROM equipment WHERE  description = '"+str(desc)+"';"
+		cursor.execute(query)
+		inputcheck = cursor.fetchone()
+		addEquipmentList(inputcheck[0], missId)
+		
+	except Exception:
+		print("Error in addEquipmentListWDesc")
 #removes equipment from a mission
 def removeEquipmentList(equipId, missId):
 	try:
@@ -444,5 +457,81 @@ def checkIfCall(employee_ID):
 
     except Exception:
         print("Error in checkIfCall")
+		
+#Returns array of non assigned volunteers
+def findAvailableVolunteers():
+    try:
+		
+		query = "SELECT volunteer.Volunteer_ID FROM volunteer WHERE  Volunteer_ID  NOT IN (SELECT Volunteer_ID  FROM teamassignments)"
+		cursor.execute(query)
+		results = cursor.fetchall()
+		inputcheck=[]
+		i=0
+		for result in results:
+			inputcheck.append(result[0])
+		return inputcheck
+
+    except Exception:
+        print("Error in findAvailableVolunteers")
+
+def findAssignedVolunteers(teamID):
+    try:
+		query = "SELECT Volunteer_ID FROM teamassignments Where Team_ID = " + str(teamID)
+		cursor.execute(query)
+		results = cursor.fetchall()
+		print results
+		inputcheck=[]
+
+		for result in results:
+			inputcheck.append(result[0])
+		return inputcheck
+
+    except Exception:
+        print("Error in findAssignedVolunteers")
+		
+def findUnAssignedTeams():
+    try:
+		query = "SELECT team.Team_ID FROM team WHERE  Team_ID  NOT IN (SELECT Team_ID  FROM is_on)"
+		cursor.execute(query)
+		results = cursor.fetchall()
+		print results
+		inputcheck=[]
+
+		for result in results:
+			inputcheck.append(result[0])
+		return inputcheck
+
+    except Exception:
+        print("Error in findUnAssignedTeams")
+		
+def findUnAssignedEvents():
+    try:
+		query = "SELECT event.Event_ID FROM event WHERE  Event_ID  NOT IN (SELECT Event_ID  FROM eventlist)"
+		cursor.execute(query)
+		results = cursor.fetchall()
+		print results
+		inputcheck=[]
+
+		for result in results:
+			inputcheck.append(result[0])
+		return inputcheck
+
+    except Exception:
+        print("Error in findUnAssignedEvents")
+		
+def findAvailableEquipment():
+    try:
+		query = "SELECT equipment.description FROM equipment WHERE  Equipment_ID  NOT IN (SELECT Equipment_ID  FROM equipmentlist)"
+		cursor.execute(query)
+		results = cursor.fetchall()
+		print results
+		inputcheck=[]
+
+		for result in results:
+			inputcheck.append(result[0])
+		return inputcheck
+
+    except Exception:
+        print("Error in findUnAssignedEquipment")
 
 
