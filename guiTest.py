@@ -26,7 +26,7 @@ print "Reply was:", fieldValues
 
 msg = "Enter logon information"
 title = "Demo of multpasswordbox"
-fieldNames = ["Server ID", "User ID", "Password"]
+fieldNames = ["User ID", "Password"]
 fieldValues = []  # we start with blanks for the values
 fieldValues = multpasswordbox(msg,title, fieldNames)
 
