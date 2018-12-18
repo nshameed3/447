@@ -37,19 +37,20 @@ def addPerson(commit = False):
 def updatePerson(passedId, fn = "null", ln = "null", pn = "null"):
 	try:
 		if fn != "null":
-			query = "update person set firstName = '"+fn+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set firstName = '"+fn+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if ln != "null":
-			query = "update person set lastName = '"+ln+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set lastName = '"+ln+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if pn != "null":
-			query = "update person set phoneNumber = '"+pn+"' where Person_ID = +'"+str(passedId)+"';"
+			query = "update person set phoneNumber = '"+pn+"' where Person_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		conn.commit()
 	except Exception:
 		print("Error in updatePerson")
+
 #inserts an employee into the database
-def addEmployee(passedId, commit = False):
+def addEmp(passedId, commit = False):
 	#check if using an existing person or a new person is to be created
 	if passedId <= 0:
 		newPersId = addPerson()
@@ -72,20 +73,20 @@ def addEmployee(passedId, commit = False):
 		return newEmpId
 
 	except Exception:
-		print("Error in addEmployee")
+		print("Error in addEmp")
 #updates an employee's information
-def updateEmployee(passedId, un = "null", pw = "null"):
+def updateEmp(passedId, un = "null", pw = "null"):
 	try:
 		if un != "null":
-			query = "update employee set username = '"+un+"' where Employee_ID = +'"+str(passedId)+"';"
+			query = "update employee set username = '"+un+"' where Employee_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		if pw != "null":
-			query = "update employee set password = '"+pw+"' where Employee_ID = +'"+str(passedId)+"';"
+			query = "update employee set password = '"+pw+"' where Employee_ID = "+str(passedId)+";"
 			cursor.execute(query)
 		conn.commit()
 	except Exception:
-		print("Error in updateEmployee")
-		
+		print("Error in updateEmp")
+
 #inserts a call staff employee into the database
 def addCallStaff(passedId):
 	#check if using an existing employee or a new employee is to be created
@@ -126,26 +127,6 @@ def addMissionChief(passedId):
 	except Exception:
 		print("Error in addMissionChief")	
 
-#inserts a missionchief into the database
-def addMissionChief(passedId):
-	#check if using an existing employee or a new employee is to be created
-	if passedId <= 0:
-		newEmpId = addEmp()
-	else:
-		newEmpId = passedId
-	
-	try:
-		newEmpId = addEmp()
-		query = "INSERT INTO `MissionChief` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
-		cursor.execute(query)
-		newChiefId = conn.insert_id()
-		conn.commit()
-		
-		return  newChiefId
-		
-	except Exception:
-		print("Error in addMissionChief")
-		
 #inserts a volunteer into the database
 def addVolunteer(passedId):
 	
@@ -167,7 +148,6 @@ def addVolunteer(passedId):
 		
 	except Exception:
 		print("Error in addVolunteer")
-		
 #removes an volunteer from the database
 def removeVolunteer(passedId):
 	try:
@@ -183,9 +163,10 @@ def updateVolunteer(passedId, av = "null"):
 		if av != "null":
 			query = "update volunteer set availability = '"+av+"' where Volunteer_ID = "+str(passedId)+";"
 			cursor.execute(query)
-			conn.commit()
+		conn.commit()
 	except Exception:
 		print("Error in updateVolunteer")
+
 #inserts a new equipment into the database
 def addEquipment():
 	#desc = input("Input description: ")
@@ -234,7 +215,7 @@ def updateEquipment(passedId, des = "null", loc = "null", own = "null", cond = "
 		conn.commit()
 	except Exception:
 		print("Error in updateEquipent")
-		
+
 #inserts a new event into the database
 def addEvent():
 	#loc = input("Input location as an address: ")
@@ -395,6 +376,8 @@ def removeEquipmentList(equipId, missId):
 	except Exception:
 		print("Error in removeEquipmentList")
 
-updatePerson(1, pn = "")
+#addEquipment()
+updateEquipment(1, des = "asdf", loc = "tfffest2", own = "fds", cond = "wew")
+
 
 
