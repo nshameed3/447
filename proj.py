@@ -4,14 +4,14 @@ from geopy.geocoders import Nominatim
 def getConnection():
 	return pymysql.connect(host='localhost',
 	user='root',
-	password='Jawa#609',
-	db='softengin')
+	password='bigButts',
+	db='test')
 
 conn = getConnection()
 cursor = conn.cursor()
 
 #inserts a person into the database
-def addPerson(commit = False):	
+def addPerson(commit = False):
 	try:
 		#first_name = input("Input new first_name: ")
 		first_name = "FName 1"
@@ -91,12 +91,11 @@ def updateEmp(passedId, un = "null", pw = "null"):
 def addCallStaff(passedId):
 	#check if using an existing employee or a new employee is to be created
 	if passedId <= 0:
-		newEmpId = addEmp()
+		newEmpId = addEmp(0)
 	else:
 		newEmpId = passedId
 	
 	try:
-		newEmpId = addEmp()
 		query = "INSERT INTO `CallStaff` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
 		cursor.execute(query)
 		newStaffId = conn.insert_id()
@@ -111,12 +110,11 @@ def addCallStaff(passedId):
 def addMissionChief(passedId):
 	#check if using an existing employee or a new employee is to be created
 	if passedId <= 0:
-		newEmpId = addEmp()
+		newEmpId = addEmp(0)
 	else:
 		newEmpId = passedId
 	
 	try:
-		newEmpId = addEmp()
 		query = "INSERT INTO `MissionChief` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
 		cursor.execute(query)
 		newChiefId = conn.insert_id()
@@ -218,6 +216,9 @@ def updateEquipment(passedId, des = "null", loc = "null", own = "null", cond = "
 
 #inserts a new event into the database
 def addEvent(loc = "", desc = "", prio = "", status = "", equip = ""):
+	conn = getConnection()
+	cursor = conn.cursor()
+	
 	#loc = input("Input location as an address: ")
 	loc = "4700 Gateway Terrace, Arbutus Md"
 	geolocator = Nominatim(user_agent="software_proj")
@@ -419,19 +420,6 @@ def removeEquipmentList(equipId, missId):
 		
 	except Exception:
 		print("Error in removeEquipmentList")
-		
-		
-def checkUserPass(username, password):
-	try:
-		query = "SELECT Employee_ID From `Employee` Where userName = '"+str(username)+"' And password = '"+str(password)+"';"
-		cursor.execute(query)
-		inputcheck = cursor.fetchone()
-		print (inputcheck)
-		
-		return inputcheck;	
-	except Exception:
-		print("Error in removeEquipmentList")
-	
 
 #checks if a username is associated with a password
 def checkUserPass(username, password):
@@ -444,5 +432,5 @@ def checkUserPass(username, password):
     except Exception:
         print("Error in removeEquipmentList")
 		
-#temp1 = addMission()
+addCallStaff(0)
 #updateMission(6, ts = True)
