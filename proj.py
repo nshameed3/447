@@ -468,21 +468,26 @@ def findAvailableVolunteers():
 	except Exception:
 		print("Error in findAvailableVolunteers")
 
-def findAssignedVolunteers(teamID):
+def findAvailableVolunteers():
 	try:
-		query = "SELECT Volunteer_ID FROM teamassignments Where Team_ID = " + str(teamID)
+		query = """SELECT dev1.Volunteer_ID, VolxPers.firstName, VolxPers.lastName, VolxPers.availability
+	FROM (select Volunteer_ID from volunteer WHERE  Volunteer_ID  NOT IN (SELECT Volunteer_ID  FROM teamassignments))as dev1
+		left Join (VolxPers)
+		on dev1.Volunteer_ID = VolxPers.Volunteer_ID;"""
 		cursor.execute(query)
 		results = cursor.fetchall()
-		print (results)
-		inputcheck=[]
-
+		print(results)
+		'''inputcheck=[]
+		i=0
 		for result in results:
 			inputcheck.append(result[0])
-		return inputcheck
+			
+		return inputcheck'''
+		return results
 
 	except Exception:
-		print("Error in findAssignedVolunteers")
-
+		print("Error in findAvailableVolunteers")
+		
 def findUnAssignedTeams():
 	try:
 		query = "SELECT team.Team_ID FROM team WHERE  Team_ID  NOT IN (SELECT Team_ID  FROM is_on)"
