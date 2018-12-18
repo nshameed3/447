@@ -149,14 +149,18 @@ def addVolunteer(passedId, avail = ""):
 #removes an volunteer from the database
 def removeVolunteer(passedId):
 	try:
+		sql = "SELECT `Person_ID` FROM `Volunteer` WHERE `Volunteer_ID` = "+str(passedId)+";"
+		cursor.execute(sql)
+		temp = cursor.fetchone()
+		toDelete = temp[0]
+		print(toDelete)
+		
 		query = "Delete From `Volunteer` Where Volunteer_ID = "+str(passedId)+";"
 		cursor.execute(query)
+
+		query = "Delete From `Person` Where Person_ID = "+str(toDelete)+";"
+		cursor.execute(query)
 		conn.commit()
-		
-		sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-        cursor.execute(sql, ('webmaster@python.org',))
-        result = cursor.fetchone()
-        print(result)
 		
 	except Exception:
 		print("Error in removeVolunteer")
