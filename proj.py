@@ -4,12 +4,13 @@ from geopy.geocoders import Nominatim
 def getConnection():
 	return pymysql.connect(host='localhost',
 	user='root',
-	password= ' ',
+	password='bigButts',
 	db='test')
 
 conn = getConnection()
 cursor = conn.cursor()
 
+#inserts a person into the database
 def addPerson(commit = False):	
 	try:
 		#first_name = input("Input new first_name: ")
@@ -32,9 +33,21 @@ def addPerson(commit = False):
 		
 	except Exception:
 		print("Error in addPerson")
-		
-	
-
+#updates a person's information
+def updatePerson(passedId, fn = "null", ln = "null", pn = "null"):
+	try:
+		if fn != "null":
+			query = "update person set firstName = '"+fn+"' where Person_ID = +'"+str(passedId)+"';"
+			cursor.execute(query)
+		if ln != "null":
+			query = "update person set lastName = '"+ln+"' where Person_ID = +'"+str(passedId)+"';"
+			cursor.execute(query)
+		if pn != "null":
+			query = "update person set phoneNumber = '"+pn+"' where Person_ID = +'"+str(passedId)+"';"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updatePerson")
 #inserts an employee into the database
 def addEmp(passedId, commit = False):
 	#check if using an existing person or a new person is to be created
@@ -60,7 +73,7 @@ def addEmp(passedId, commit = False):
 
 	except Exception:
 		print("Error in addEmp")
-
+		
 #inserts a call staff employee into the database
 def addCallStaff(passedId):
 	#check if using an existing employee or a new employee is to be created
@@ -74,6 +87,7 @@ def addCallStaff(passedId):
 		query = "INSERT INTO `CallStaff` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
 		cursor.execute(query)
 		newStaffId = conn.insert_id()
+		conn.commit()
 		
 		return  newStaffId
 		
@@ -322,7 +336,6 @@ def removeEquipmentList(equipId, missId):
 	except Exception:
 		print("Error in removeEquipmentList")
 
-
-
+updatePerson(1, pn = "")
 
 
