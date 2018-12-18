@@ -73,6 +73,18 @@ def addEmp(passedId, commit = False):
 
 	except Exception:
 		print("Error in addEmp")
+#updates an employee's information
+def updatePerson(passedId, un = "null", pw = "null"):
+	try:
+		if un != "null":
+			query = "update employee set username = '"+un+"' where Employee_ID = +'"+str(passedId)+"';"
+			cursor.execute(query)
+		if pw != "null":
+			query = "update employee set password = '"+pw+"' where Employee_ID = +'"+str(passedId)+"';"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updatePerson")
 		
 #inserts a call staff employee into the database
 def addCallStaff(passedId):
