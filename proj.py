@@ -346,6 +346,21 @@ def removeMission(passedId):
 		
 	except Exception:
 		print("Error in removeMission")
+#updates a mission's information
+def updateMission(passedId, ts = False, pri = "null", stat = "null"):
+	try:
+		if ts == True:
+			query = "update mission set timeSinceAssigned = current_timestamp() where Mission_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if pri != "null":
+			query = "update mission set priority = '"+pri+"' where Mission_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if stat != "null":
+			query = "update mission set status = '"+stat+"' where Mission_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updateMission")
 
 #assigns a team to a mission
 def addIsOn(teamId, missId):
