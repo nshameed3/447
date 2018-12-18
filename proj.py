@@ -126,6 +126,25 @@ def addMissionChief(passedId):
 	except Exception:
 		print("Error in addMissionChief")	
 
+#inserts a missionchief into the database
+def addMissionChief(passedId):
+	#check if using an existing employee or a new employee is to be created
+	if passedId <= 0:
+		newEmpId = addEmp()
+	else:
+		newEmpId = passedId
+	
+	try:
+		newEmpId = addEmp()
+		query = "INSERT INTO `MissionChief` (`Employee_ID`)  VALUES ( "+ str(newEmpId) +");"
+		cursor.execute(query)
+		newChiefId = conn.insert_id()
+		conn.commit()
+		
+		return  newChiefId
+		
+	except Exception:
+		print("Error in addMissionChief")	
 #inserts a volunteer into the database
 def addVolunteer(passedId):
 	
@@ -138,7 +157,7 @@ def addVolunteer(passedId):
 	avail = "10am to 5pm"
 	
 	try:
-		query = "INSERT INTO `Volunteer` (`availability`, `Person_ID`, Team_ID)  VALUES ( '"+avail+"', "+ str(newPersId)+", null);"
+		query = "INSERT INTO `Volunteer` (`availability`, `Person_ID`)  VALUES ( '"+avail+"', "+ str(newPersId)+");"
 		cursor.execute(query)
 		newVolId = conn.insert_id()
 		conn.commit()
@@ -156,7 +175,15 @@ def removeVolunteer(passedId):
 		
 	except Exception:
 		print("Error in removeVolunteer")
-
+#updates a volunteer's information
+def updateVolunteer(passedId, av = "null"):
+	try:
+		if av != "null":
+			query = "update volunteer set availability = '"+av+"' where Volunteer_ID = "+str(passedId)+";"
+			cursor.execute(query)
+			conn.commit()
+	except Exception:
+		print("Error in updateVolunteer")
 #inserts a new equipment into the database
 def addEquipment():
 	#desc = input("Input description: ")
