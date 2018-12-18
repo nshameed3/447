@@ -216,7 +216,25 @@ def removeEquipment(passedId):
 		
 	except Exception:
 		print("Error in removeEquipment")
-
+#updates an equipment's information
+def updateEquipment(passedId, des = "null", loc = "null", own = "null", cond = "null"):
+	try:
+		if des != "null":
+			query = "update equipment set description = '"+des+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if loc != "null":
+			query = "update equipment set location = '"+loc+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if own != "null":
+			query = "update equipment set ownerInfo = '"+own+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		if cond != "null":
+			query = "update equipment set `condition` = '"+cond+"' where Equipment_ID = "+str(passedId)+";"
+			cursor.execute(query)
+		conn.commit()
+	except Exception:
+		print("Error in updateEquipent")
+		
 #inserts a new event into the database
 def addEvent():
 	#loc = input("Input location as an address: ")
