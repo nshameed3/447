@@ -58,10 +58,10 @@ def addEmp(passedId, commit = False):
 		newPersId = passedId
 		
 	try:
-		#username = input("Input new username: ")
-		username = "test1"
-		#password = input("Input new password: ")
-		password = "pass1"
+		username = input("Input new username: ")
+		#username = "test1"
+		password = input("Input new password: ")
+		#password = "pass1"
 		
 		# Create a new record
 		query = "INSERT INTO `Employee` (`Person_ID`, `username`,`password`)  VALUES ( "+ str(newPersId) +", '" + username + "', '" + password + "');"
@@ -166,15 +166,15 @@ def updateVolunteer(passedId, av = "null"):
 		print("Error in updateVolunteer")
 
 #inserts a new equipment into the database
-def addEquipment():
+def addEquipment(desc = "", loc = "", owner = "null", cond = ""):
 	#desc = input("Input description: ")
-	desc = "Boat"
+	#desc = "Boat"
 	#loc = input("Input current location: ")
-	loc = "8475 West Hill Street, Baltimore"
+	#loc = "8475 West Hill Street, Baltimore"
 	#owner = input("Input Contact information for the Owner: ")
-	owner = "Michael James, 443-444-7786"
+	#owner = "Michael James, 443-444-7786"
 	#cond = input("Input current condition of the item: ")
-	cond = "Fully functioning, a few scratches"
+	#cond = "Fully functioning, a few scratches"
 	
 	try:
 		query = "INSERT INTO `Equipment` (`description`, `location`, `ownerInfo`, `condition`)  VALUES ( '"+desc+"', '"+loc+"', '"+owner+"', '"+cond+"');"
@@ -220,7 +220,7 @@ def addEvent(loc = "", desc = "", prio = "", status = "", equip = ""):
 	cursor = conn.cursor()
 	
 	#loc = input("Input location as an address: ")
-	loc = "4700 Gateway Terrace, Arbutus Md"
+	#loc = "4700 Gateway Terrace, Arbutus Md"
 	geolocator = Nominatim(user_agent="software_proj")
 	location = geolocator.geocode(loc)
 	
@@ -232,7 +232,7 @@ def addEvent(loc = "", desc = "", prio = "", status = "", equip = ""):
 	#desc = "Ive fallen and I cant get up"
 	#prio = input("Input Priority of the event: ")
 	#prio = "medium"
-	#status = "new"
+	status = "new"
 	#equip = input("List special equipment that might be needed:")
 	#equip = "Ambulance"
 	
@@ -257,6 +257,8 @@ def removeEvent(passedId):
 		print("Error in removeEvent")
 #updates an event's information
 def updateEvent(passedId, loc = "null", des = "null", pri = "null", stat = "null", equ = "null"):
+	conn = getConnection()
+	cursor = conn.cursor()
 	try:
 	
 		if loc != "null":
@@ -431,6 +433,16 @@ def checkUserPass(username, password):
         return inputcheck;
     except Exception:
         print("Error in removeEquipmentList")
-		
-addCallStaff(0)
-#updateMission(6, ts = True)
+#checks if an employee is a call staff	
+def checkIfCall(employee_ID):
+    try:
+        query = "SELECT CallStaff_ID From CallStaff Where Employee_ID = "+str(employee_ID)
+        cursor.execute(query)
+        inputcheck = cursor.fetchone()
+
+        return inputcheck;
+
+    except Exception:
+        print("Error in checkIfCall")
+
+
