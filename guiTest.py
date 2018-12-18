@@ -110,9 +110,10 @@ def loadReomveVolunteerGui():
 		test.removeVolunteer(int(fieldValues[0]))
 
 def loadMissionCreateGui():
+	#MISSION CREATION BLOCK
 	msg = "Enter mission information"
 	title = "CREATE MISSION"
-	fieldNames = ["First Name","Last Name","Phone Number","Street Address","City","State","ZipCode", "Availability"]
+	fieldNames = [""]
 	fieldValues = []  # we start with blanks for the values
 	fieldValues = multenterbox(msg,title, fieldNames)
 
@@ -126,6 +127,9 @@ def loadMissionCreateGui():
 		if errmsg == "": break # no problems found
 		fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)
 	print("Reply was:", fieldValues)
+	if fieldValues != "None":
+		test.addMission(pri = "", stat = "new")
+		
 
 msg = "Enter logon information"
 title = "LOGIN"
@@ -152,31 +156,35 @@ switch = test.checkIfCall(check[0])
 
 
 #SELECTION FOR THE MISSION CHIEF
+flagEscape = False
 if switch is None:
-	msg = "Choose from the following"
-	title = "MISSION CHIEF"
-	choices = ["Create Mission", "Create Team", "Update Mission", "Update Team", "View Event Map", "Delete Mission"]
-	choice = choicebox(msg, title, choices)
+	while flagEscape == False:
+		msg = "Choose from the following"
+		title = "MISSION CHIEF"
+		choices = ["Create Mission", "Create Team", "Update Mission", "Update Team", "View Event Map", "Delete Mission"]
+		choice = choicebox(msg, title, choices)
 
-	#MISSION CREATION BLOCK
-	if choice == "Create Mission":
-		loadMissionCreateGui()
+		if choice == "Create Mission":
+			loadMissionCreateGui()
+		else:
+			flagEscape = True
 	
 else: #SELECTION FOR THE CALL STAFF
-
-	msg = "Choose from the following"
-	title = "CALL STAFF"
-	choices = ["Create Event", "Create Equipment", "Create Volunteer", "Delete Equipment", "Delete Volunteer"]
-	choice = choicebox(msg, title, choices)
+	while flagEscape == False:
+		msg = "Choose from the following"
+		title = "CALL STAFF"
+		choices = ["Create Event", "Create Equipment", "Create Volunteer", "Delete Equipment", "Delete Volunteer"]
+		choice = choicebox(msg, title, choices)
 	
-	if choice == "Create Event":
-		loadCreateEventGui()
-	elif choice == "Create Equipment":	
-		loadCreateEquipmentGui()
-	elif choice == "Create Volunteer":
-		loadCreateVolunteerGui()
-	elif choice == "Delete Equipment":
-		loadRemoveEquipmentGui()
-	elif choice == "Delete Volunteer":
-		loadReomveVolunteerGui()
-	
+		if choice == "Create Event":
+			loadCreateEventGui()
+		elif choice == "Create Equipment":	
+			loadCreateEquipmentGui()
+		elif choice == "Create Volunteer":
+			loadCreateVolunteerGui()
+		elif choice == "Delete Equipment":
+			loadRemoveEquipmentGui()
+		elif choice == "Delete Volunteer":
+			loadReomveVolunteerGui()
+		else:
+			flagEscape = True
